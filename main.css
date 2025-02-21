@@ -1,0 +1,76 @@
+/* styles.css */
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    background-image: url("img/graund.png"); /* Путь к изображению */
+    background-size: cover; /* Чтобы изображение покрывало весь экран */
+    background-position: center; /* Центрирование изображения */
+    background-repeat: no-repeat; /* Отключает повторение */
+}
+
+/* Заголовок и подзаголовок по центру экрана */
+header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 25vh; /* Высота заголовка 25% экрана */
+    background-color: transparent; /* Убирает цвет фона */
+    color: white;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 50px; /* Увеличенный размер заголовка */
+    font-weight: 700; /* Толщина */
+    margin: 0;
+    color: black;
+}
+
+p {
+    font-size: 24px;
+    font-weight: 400;
+    margin-top: 10px;
+    color: black;
+}
+
+/* Карточки */
+.subjects {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 карточки в ряду */
+    gap: 20px; /* Расстояние между карточками */
+    justify-content: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Дизайн карточек */
+.subject {
+    text-decoration: none;
+    padding: 30px;
+    background-color: #009688; 
+    color: white;
+    border-radius: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 120px; /* Увеличенная высота */
+}
+
+.subject:hover {
+    background-color: #0056b3;
+}
+
+/* Адаптивность для маленьких экранов */
+@media (max-width: 600px) {
+    .subjects {
+        grid-template-columns: repeat(1, 1fr); /* По 1 карточке в ряду на маленьких экранах */
+    }
+}
