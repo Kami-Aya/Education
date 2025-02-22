@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Алгебра - Тест</title>
+    <link rel="stylesheet" href="math.css">
+</head>
+<body>
+
+    <header>
+        <h1>Алгебра</h1>
+    </header>
+
+    <div class="intro">
+        <p>Бұл тестте <strong>15 сұрақ</strong> бар.</p>
+        <p>Әр сұраққа <strong>4 жауап нұсқасы</strong> беріледі.</p>
+        <p>Дұрыс жауапты таңдап, нәтижені көріңіз.</p>
+    </div>
+
+    <button class="start-btn">Тестті бастау</button>
+
+    <div class="test-container" style="display: none;">
+        <div class="question-box">
+            <p id="question-text"><strong></strong></p>
+            <ul id="answer-options"></ul>
+        </div>
+
+        <button class="next-btn" onclick="nextQuestion()">Далее</button>
+    </div>
+
+    <div class="result" style="display: none;">
+        <h2>Сіздің нәтижеңіз: <span id="score">0</span> / 15</h2>
+    </div>
+
+    <script>
+        const questions = [
+            { 
+                question: "Теңдеуді шешіңіз: 2x + 5 = 13", 
+                answers: ["4", "5", "6", "3"], 
+                correct: 0 
+            },
+            { 
+                question: "Логарифмнің негізгі қасиеті: log_a (b*c) = ?", 
+                answers: ["log_a b + log_a c", "log_a b - log_a c", "log_a b * log_a c", "log_a b / log_a c"], 
+                correct: 0 
+            },
+            { 
+                question: "Квадраттық функцияның түбірлерін табыңыз: x² - 5x + 6 = 0", 
+                answers: ["1 және 5", "2 және 3", "3 және 4", "4 және 6"], 
+                correct: 1 
+            },
+            { 
+                question: "Тригонометриялық тепе-теңдік: sin²x + cos²x = ?", 
+                answers: ["0", "1", "sin x", "cos x"], 
+                correct: 1 
+            },
+            { 
+                question: "Прогрессия: Егер алғашқы мүшесі 3, ал айырмасы 5 болса, 5-мүшесі қандай?", 
+                answers: ["15", "23", "25", "30"], 
+                correct: 2 
+            },
+            { 
+                question: "Кубтық түбірдің анықтамасы: ³√27 =", 
+                answers: ["9", "3", "6", "2"], 
+                correct: 1 
+            },
+            { 
+                question: "Туынды: Егер f(x) = x² болса, f'(x) =", 
+                answers: ["x", "2x", "x²", "1"], 
+                correct: 1 
+            },
+            { 
+                question: "Геометриялық прогрессия: Егер алғашқы мүшесі 2, еселігі 3 болса, 4-мүшесі қандай?", 
+                answers: ["18", "54", "36", "24"], 
+                correct: 1 
+            },
+            { 
+                question: "Теңдеу түбірі: e^x = 1 болса, x =", 
+                answers: ["0", "1", "e", "-1"], 
+                correct: 0 
+            },
+            { 
+                question: "Кешенді сан: i² =", 
+                answers: ["1", "-1", "i", "0"], 
+                correct: 1 
+            },
+            { 
+                question: "Матринаның анықтауышы: Егер матрица 2x2 болса, детерминант қалай есептеледі?", 
+                answers: ["a*d - b*c", "a + d", "a*d + b*c", "a - d"], 
+                correct: 0 
+            },
+            { 
+                question: "Параболаның төбесінің координаталары: y = x² - 4x + 3", 
+                answers: ["(2, -1)", "(1, 3)", "(3, 2)", "(0, 3)"], 
+                correct: 0 
+            },
+            { 
+                question: "Туындының физикалық мағынасы қандай?", 
+                answers: ["Ығысу", "Жылдамдық", "Жеделдету", "Уақыт"], 
+                correct: 1 
+            },
+            { 
+                question: "Интегралдау: ∫ x dx =", 
+                answers: ["x²/2", "x²", "2x", "x"], 
+                correct: 0 
+            },
+            { 
+                question: "Математикалық индукция әдісі не үшін қолданылады?", 
+                answers: ["Күрделі теңдеулерді шешу", "Шексіз қатарларды тексеру", "Пайымдау және дәлелдеу", "Логарифмдерді есептеу"], 
+                correct: 2 
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        document.querySelector(".start-btn").addEventListener("click", function() {
+            document.querySelector(".test-container").style.display = "block";
+            document.querySelector(".intro").style.display = "none";
+            this.style.display = "none";
+            loadQuestion();
+        });
+
+        function loadQuestion() {
+            let questionObj = questions[currentQuestionIndex];
+            document.getElementById("question-text").innerHTML = "<strong>" + (currentQuestionIndex + 1) + "-сұрақ:</strong> " + questionObj.question;
+            let answersHtml = "";
+            questionObj.answers.forEach((answer, index) => {
+                answersHtml += `<li onclick="checkAnswer(this, ${index === questionObj.correct})">${answer}</li>`;
+            });
+            document.getElementById("answer-options").innerHTML = answersHtml;
+
+            let nextBtn = document.querySelector(".next-btn");
+            nextBtn.style.display = "none";
+        }
+
+        function checkAnswer(element, isCorrect) {
+            if (isCorrect) {
+                element.classList.add("correct");
+                score++;
+            } else {
+                element.classList.add("wrong");
+            }
+            let options = document.querySelectorAll("#answer-options li");
+            options.forEach(option => option.style.pointerEvents = "none");
+
+            let nextBtn = document.querySelector(".next-btn");
+            nextBtn.style.display = "block";
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.textContent = "Завершить тест";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                document.querySelector(".test-container").style.display = "none";
+                document.querySelector(".result").style.display = "block";
+                document.getElementById("score").textContent = score;
+            }
+        }
+    </script>
+
+</body>
+</html>

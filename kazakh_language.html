@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Қазақ тілі мен әдебиет - Тест</title>
+    <link rel="stylesheet" href="kazakh_language.css">
+</head>
+<body>
+
+    <header>
+        <h1>Қазақ тілі мен әдебиет</h1>
+    </header>
+
+    <div class="intro">
+        <p>Бұл тестте <strong>15 сұрақ</strong> бар.</p>
+        <p>Әр сұраққа <strong>4 жауап нұсқасы</strong> беріледі.</p>
+        <p>Дұрыс жауапты таңдап, нәтижені көріңіз.</p>
+    </div>
+
+    <button class="start-btn">Тестті бастау</button>
+
+    <div class="test-container" style="display: none;">
+        <div class="question-box">
+            <p id="question-text"><strong></strong></p>
+            <ul id="answer-options"></ul>
+        </div>
+
+        <button class="next-btn" onclick="nextQuestion()">Келесі</button>
+    </div>
+
+    <div class="result" style="display: none;">
+        <h2>Сіздің нәтижеңіз: <span id="score">0</span> / 15</h2>
+    </div>
+
+    <script>
+        const questions = [
+            { 
+                question: "Қазақ әліпбиінде қанша әріп бар?", 
+                answers: ["26", "32", "42", "39"], 
+                correct: 3 
+            },
+            { 
+                question: "Абай Құнанбаевтың туған жылы?", 
+                answers: ["1845", "1861", "1835", "1875"], 
+                correct: 0 
+            },
+            { 
+                question: "Батырлар жырына жатпайтын шығарма?", 
+                answers: ["«Қобыланды батыр»", "«Ер Тарғын»", "«Отырар дастаны»", "«Алпамыс батыр»"], 
+                correct: 2 
+            },
+            { 
+                question: "Қазақтың тұңғыш романы?", 
+                answers: ["«Қараш-қараш»", "«Ботагөз»", "«Бақытсыз Жамал»", "«Абай жолы»"], 
+                correct: 2 
+            },
+            { 
+                question: "«Күш атасын танымас» қандай сөйлем түріне жатады?", 
+                answers: ["Жай сөйлем", "Мақал", "Фразеологизм", "Мәтін"], 
+                correct: 1 
+            },
+            { 
+                question: "Сөз таптарының саны нешеу?", 
+                answers: ["5", "7", "9", "6"], 
+                correct: 2 
+            },
+            { 
+                question: "Тұрлаулы мүшелерге не жатады?", 
+                answers: ["Бастауыш, баяндауыш", "Толықтауыш, анықтауыш", "Көсемше, есімше", "Шылау, үстеу"], 
+                correct: 0 
+            },
+            { 
+                question: "Қазақтың ұлттық аспабы қайсысы?", 
+                answers: ["Гитара", "Домбыра", "Скрипка", "Фортепиано"], 
+                correct: 1 
+            },
+            { 
+                question: "Қандай буын түрлері бар?", 
+                answers: ["Ашық, тұйық, бітеу", "Бітеу, жалғау, ашық", "Жалғау, жұрнақ, түбір", "Буын жоқ"], 
+                correct: 0 
+            },
+            { 
+                question: "«Қыс» өлеңінің авторы?", 
+                answers: ["Сәкен Сейфуллин", "Абай Құнанбаев", "Мағжан Жұмабаев", "Жамбыл Жабаев"], 
+                correct: 1 
+            },
+            { 
+                question: "Фонетика нені зерттейді?", 
+                answers: ["Сөз мағынасын", "Тіл тарихын", "Дыбыстар жүйесін", "Сөйлем құрылымын"], 
+                correct: 2 
+            },
+            { 
+                question: "«Қазақ хрестоматиясы» еңбегінің авторы?", 
+                answers: ["Ыбырай Алтынсарин", "Абай Құнанбаев", "Ахмет Байтұрсынұлы", "Шәкәрім Құдайбердіұлы"], 
+                correct: 0 
+            },
+            { 
+                question: "«Мен жастарға сенемін» өлеңінің авторы?", 
+                answers: ["Сәкен Сейфуллин", "Мағжан Жұмабаев", "Абай Құнанбаев", "Ілияс Жансүгіров"], 
+                correct: 1 
+            },
+            { 
+                question: "Синоним сөздерді тап:", 
+                answers: ["Көк - аспан", "Мектеп - білім", "Қуаныш - шаттық", "Қар - жаңбыр"], 
+                correct: 2 
+            },
+            { 
+                question: "Жазба әдебиеттің негізін салған кім?", 
+                answers: ["Абай Құнанбаев", "Ахмет Байтұрсынұлы", "Жүсіп Баласағұн", "Шоқан Уәлиханов"], 
+                correct: 0 
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        document.querySelector(".start-btn").addEventListener("click", function() {
+            document.querySelector(".test-container").style.display = "block";
+            document.querySelector(".intro").style.display = "none";
+            this.style.display = "none";
+            loadQuestion();
+        });
+
+        function loadQuestion() {
+            let questionObj = questions[currentQuestionIndex];
+            document.getElementById("question-text").innerHTML = "<strong>" + (currentQuestionIndex + 1) + "-сұрақ:</strong> " + questionObj.question;
+            let answersHtml = "";
+            questionObj.answers.forEach((answer, index) => {
+                answersHtml += `<li onclick="checkAnswer(this, ${index === questionObj.correct})">${answer}</li>`;
+            });
+            document.getElementById("answer-options").innerHTML = answersHtml;
+
+            let nextBtn = document.querySelector(".next-btn");
+            nextBtn.style.display = "none";
+        }
+
+        function checkAnswer(element, isCorrect) {
+            if (isCorrect) {
+                element.classList.add("correct");
+                score++;
+            } else {
+                element.classList.add("wrong");
+            }
+            let options = document.querySelectorAll("#answer-options li");
+            options.forEach(option => option.style.pointerEvents = "none");
+
+            let nextBtn = document.querySelector(".next-btn");
+            nextBtn.style.display = "block";
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.textContent = "Завершить тест";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                document.querySelector(".test-container").style.display = "none";
+                document.querySelector(".result").style.display = "block";
+                document.getElementById("score").textContent = score;
+            }
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дүниежүзі тарихы - Тест</title>
+    <link rel="stylesheet" href="history.css">
+</head>
+<body>
+
+    <header>
+        <h1>Дүниежүзі тарихы</h1>
+    </header>
+
+    <div class="intro">
+        <p>Бұл тестте <strong>15 сұрақ</strong> бар.</p>
+        <p>Әр сұраққа <strong>4 жауап нұсқасы</strong> беріледі.</p>
+        <p>Дұрыс жауапты таңдап, нәтижені көріңіз.</p>
+    </div>
+
+    <button class="start-btn">Тестті бастау</button>
+
+    <div class="test-container" style="display: none;">
+        <div class="question-box">
+            <p id="question-text"><strong></strong></p>
+            <ul id="answer-options"></ul>
+        </div>
+
+        <button class="next-btn" onclick="nextQuestion()">Далее</button>
+    </div>
+
+    <div class="result" style="display: none;">
+        <h2>Сіздің нәтижеңіз: <span id="score">0</span> / 15</h2>
+    </div>
+
+    <script>
+        const questions = [
+            { 
+                question: "Екінші дүниежүзілік соғыс қай жылы басталды?", 
+                answers: ["1935", "1939", "1941", "1945"], 
+                correct: 1 
+            },
+            { 
+                question: "Ұлы француз революциясы қай жылдары болды?", 
+                answers: ["1618-1648", "1789-1799", "1812-1815", "1848-1852"], 
+                correct: 1 
+            },
+            { 
+                question: "Рим империясы қай жылы құлады?", 
+                answers: ["330", "476", "632", "1054"], 
+                correct: 1 
+            },
+            { 
+                question: "Қай ғасырда Ұлы Жібек жолы кеңінен дамыды?", 
+                answers: ["II ғасыр", "VII ғасыр", "X ғасыр", "XVI ғасыр"], 
+                correct: 2 
+            },
+            { 
+                question: "Индустриялық революция қай елде басталды?", 
+                answers: ["Франция", "Германия", "Англия", "АҚШ"], 
+                correct: 2 
+            },
+            { 
+                question: "Наполеон Бонапарттың Ватерлоо шайқасы қай жылы болды?", 
+                answers: ["1804", "1812", "1815", "1821"], 
+                correct: 2 
+            },
+            { 
+                question: "Қай ел Бірінші дүниежүзілік соғыстан кейін ең көп территория жоғалтты?", 
+                answers: ["Германия", "Осман империясы", "Ресей", "Аустрия-Венгрия"], 
+                correct: 1 
+            },
+            { 
+                question: "Қай ел 1492 жылы Американы ашты?", 
+                answers: ["Франция", "Португалия", "Испания", "Англия"], 
+                correct: 2 
+            },
+            { 
+                question: "АҚШ Тәуелсіздік декларациясы қай жылы қабылданды?", 
+                answers: ["1756", "1776", "1789", "1804"], 
+                correct: 1 
+            },
+            { 
+                question: "Бірінші дүниежүзілік соғыс неше жылға созылды?", 
+                answers: ["2 жыл", "4 жыл", "6 жыл", "10 жыл"], 
+                correct: 1 
+            },
+            { 
+                question: "Қай мемлекеттер Қырғи-қабақ соғыс кезінде басты қарсыластар болды?", 
+                answers: ["АҚШ пен Жапония", "КСРО мен АҚШ", "Франция мен Германия", "Қытай мен Үндістан"], 
+                correct: 1 
+            },
+            { 
+                question: "Қай жылы Берлин қабырғасы құлатылды?", 
+                answers: ["1961", "1975", "1989", "1991"], 
+                correct: 2 
+            },
+            { 
+                question: "Тәуелсіз Қазақстанның алғашқы президенті кім болды?", 
+                answers: ["Қасым-Жомарт Тоқаев", "Нұрсұлтан Назарбаев", "Дінмұхамед Қонаев", "Абылай хан"], 
+                correct: 1 
+            },
+            { 
+                question: "Гитлер қай елге басып кіру арқылы Екінші дүниежүзілік соғысты бастады?", 
+                answers: ["Франция", "Кеңес Одағы", "Польша", "Англия"], 
+                correct: 2 
+            },
+            { 
+                question: "1917 жылғы Ресейдегі Қазан төңкерісінің басшысы кім?", 
+                answers: ["Сталин", "Троцкий", "Ленин", "Николай II"], 
+                correct: 2 
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        document.querySelector(".start-btn").addEventListener("click", function() {
+            document.querySelector(".test-container").style.display = "block";
+            document.querySelector(".intro").style.display = "none";
+            this.style.display = "none";
+            loadQuestion();
+        });
+
+        function loadQuestion() {
+            let questionObj = questions[currentQuestionIndex];
+            document.getElementById("question-text").innerHTML = "<strong>" + (currentQuestionIndex + 1) + "-сұрақ:</strong> " + questionObj.question;
+            let answersHtml = "";
+            questionObj.answers.forEach((answer, index) => {
+                answersHtml += `<li onclick="checkAnswer(this, ${index === questionObj.correct})">${answer}</li>`;
+            });
+            document.getElementById("answer-options").innerHTML = answersHtml;
+
+            let nextBtn = document.querySelector(".next-btn");
+            nextBtn.style.display = "none";
+        }
+
+        function checkAnswer(element, isCorrect) {
+            if (isCorrect) {
+                element.classList.add("correct");
+                score++;
+            } else {
+                element.classList.add("wrong");
+            }
+            let options = document.querySelectorAll("#answer-options li");
+            options.forEach(option => option.style.pointerEvents = "none");
+
+            let nextBtn = document.querySelector(".next-btn");
+            nextBtn.style.display = "block";
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.textContent = "Завершить тест";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                document.querySelector(".test-container").style.display = "none";
+                document.querySelector(".result").style.display = "block";
+                document.getElementById("score").textContent = score;
+            }
+        }
+    </script>
+
+</body>
+</html>

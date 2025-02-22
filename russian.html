@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест по русскому языку</title>
+    <link rel="stylesheet" href="russian.css">
+</head>
+<body>
+
+    <header>
+        <h1>Тест по русскому языку</h1>
+    </header>
+
+    <div class="intro">
+        <p>Этот тест содержит <strong>15 вопросов</strong>.</p>
+        <p>У каждого вопроса <strong>4 варианта ответа</strong>.</p>
+        <p>Выберите правильный ответ и узнайте свой результат.</p>
+    </div>
+
+    <button class="start-btn">Начать тест</button>
+
+    <div class="test-container" style="display: none;">
+        <div class="question-box">
+            <p id="question-text"><strong></strong></p>
+            <ul id="answer-options"></ul>
+        </div>
+
+        <button class="next-btn" onclick="nextQuestion()">Далее</button>
+    </div>
+
+    <div class="result" style="display: none;">
+        <h2>Ваш результат: <span id="score">0</span> / 15</h2>
+    </div>
+
+    <script>
+        const questions = [
+            { 
+                question: "Что такое существительное?", 
+                answers: ["Часть речи, обозначающая предмет", "Часть речи, обозначающая действие", "Часть речи, обозначающая признак", "Часть речи, обозначающая количество"], 
+                correct: 0 
+            },
+            { 
+                question: "Какое слово является прилагательным?", 
+                answers: ["Красивый", "Бежать", "Стол", "Прыгать"], 
+                correct: 0 
+            },
+            { 
+                question: "Какие бывают члены предложения?", 
+                answers: ["Подлежащее, сказуемое, дополнение", "Существительное, прилагательное, глагол", "Буква, слово, предложение", "Запятая, точка, тире"], 
+                correct: 0 
+            },
+            { 
+                question: "Что такое прямая речь?", 
+                answers: ["Чужая речь, переданная дословно", "Слово в переносном значении", "Слово в прямом значении", "Слово с приставкой"], 
+                correct: 0 
+            },
+            { 
+                question: "Какое слово является сложным?", 
+                answers: ["Самолёт", "Лес", "Белый", "Прыгать"], 
+                correct: 0 
+            },
+            { 
+                question: "Как называются времена глагола?", 
+                answers: ["Прошедшее, настоящее, будущее", "Подлежащее, сказуемое", "Основной и вспомогательный", "Корень, суффикс"], 
+                correct: 0 
+            },
+            { 
+                question: "Какие бывают типы текста?", 
+                answers: ["Описание, повествование, рассуждение", "Существительное, глагол, прилагательное", "Члены предложения", "Рассказ, роман, сказка"], 
+                correct: 0 
+            },
+            { 
+                question: "Какие окончания у существительных множественного числа?", 
+                answers: ["-ы, -и, -а, -я", "-ит, -ет, -ут, -ют", "-ый, -ий, -ой", "-н, -т, -д"], 
+                correct: 0 
+            },
+            { 
+                question: "Чем отличается пословица от поговорки?", 
+                answers: ["Пословица содержит вывод, поговорка — нет", "Поговорка содержит вывод, пословица — нет", "Пословица — длинное предложение, поговорка — короткое слово", "Поговорки есть только в русском языке"], 
+                correct: 0 
+            },
+            { 
+                question: "Что такое синоним?", 
+                answers: ["Слова с похожим значением", "Слова с противоположным значением", "Слова в прямом значении", "Служебные слова"], 
+                correct: 0 
+            },
+            { 
+                question: "Что такое антоним?", 
+                answers: ["Слова с противоположным значением", "Слова с похожим значением", "Слова в прямом значении", "Фразеологизмы"], 
+                correct: 0 
+            },
+            { 
+                question: "Какие бывают звуки?", 
+                answers: ["Гласные, согласные", "Твёрдые, мягкие", "Слово, предложение", "Пунктуация"], 
+                correct: 0 
+            },
+            { 
+                question: "Что такое орфография?", 
+                answers: ["Правила написания слов", "Правила произношения", "Правила составления предложений", "Правила расстановки знаков препинания"], 
+                correct: 0 
+            },
+            { 
+                question: "Какие бывают падежи?", 
+                answers: ["Именительный, родительный, дательный, винительный, творительный, предложный", "Члены предложения", "Глагольные формы", "Фонетические явления"], 
+                correct: 0 
+            },
+            { 
+                question: "Какое предложение является повествовательным?", 
+                answers: ["Я иду в школу.", "Ты идёшь в школу?", "Какая красивая природа!", "Не мешай мне работать!"], 
+                correct: 0 
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        document.querySelector(".start-btn").addEventListener("click", function() {
+            document.querySelector(".test-container").style.display = "block";
+            document.querySelector(".intro").style.display = "none";
+            this.style.display = "none";
+            loadQuestion();
+        });
+
+        function loadQuestion() {
+            let questionObj = questions[currentQuestionIndex];
+            document.getElementById("question-text").innerHTML = "<strong>" + (currentQuestionIndex + 1) + "-й вопрос:</strong> " + questionObj.question;
+            let answersHtml = "";
+            questionObj.answers.forEach((answer, index) => {
+                answersHtml += `<li onclick="checkAnswer(this, ${index === questionObj.correct})">${answer}</li>`;
+            });
+            document.getElementById("answer-options").innerHTML = answersHtml;
+
+            let nextBtn = document.querySelector(".next-btn");
+            nextBtn.style.display = "none";
+        }
+
+        function checkAnswer(element, isCorrect) {
+            if (isCorrect) {
+                element.classList.add("correct");
+                score++;
+            } else {
+                element.classList.add("wrong");
+            }
+            let options = document.querySelectorAll("#answer-options li");
+            options.forEach(option => option.style.pointerEvents = "none");
+
+            let nextBtn = document.querySelector(".next-btn");
+            nextBtn.style.display = "block";
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.textContent = "Завершить тест";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                document.querySelector(".test-container").style.display = "none";
+                document.querySelector(".result").style.display = "block";
+                document.getElementById("score").textContent = score;
+            }
+        }
+    </script>
+
+</body>
+</html>

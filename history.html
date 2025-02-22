@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Қазақстан тарихы - Тест</title>
+    <link rel="stylesheet" href="history.css">
+</head>
+<body>
+
+    <header>
+        <h1>Қазақстан тарихы</h1>
+    </header>
+
+    <div class="intro">
+        <p>Бұл тестте <strong>15 сұрақ</strong> бар.</p>
+        <p>Әр сұраққа <strong>4 жауап нұсқасы</strong> беріледі.</p>
+        <p>Дұрыс жауапты таңдап, нәтижені көріңіз.</p>
+    </div>
+
+    <button class="start-btn">Тестті бастау</button>
+
+    <div class="test-container" style="display: none;">
+        <div class="question-box">
+            <p id="question-text"><strong></strong></p>
+            <ul id="answer-options"></ul>
+        </div>
+
+        <button class="next-btn" onclick="nextQuestion()">Далее</button>
+    </div>
+
+    <div class="result" style="display: none;">
+        <h2>Сіздің нәтижеңіз: <span id="score">0</span> / 15</h2>
+    </div>
+
+    <script>
+        const questions = [
+            { 
+                question: "Қазақстан Республикасының тәуелсіздігі қай жылы жарияланды?", 
+                answers: ["1990 жыл", "1991 жыл", "1992 жыл", "1989 жыл"], 
+                correct: 1 
+            },
+            { 
+                question: "«Жеті жарғы» заңдар жинағын қабылдаған хан кім?", 
+                answers: ["Абылай хан", "Қасым хан", "Тәуке хан", "Есім хан"], 
+                correct: 2 
+            },
+            { 
+                question: "Қазақ хандығының негізін қалаған хандар?", 
+                answers: ["Абылай хан мен Әбілқайыр хан", "Жәнібек пен Керей", "Қасым хан мен Есім хан", "Тәуке хан мен Жәңгір хан"], 
+                correct: 1 
+            },
+            { 
+                question: "Қазақстан жеріндегі ең алғашқы мемлекеттердің бірі?", 
+                answers: ["Қыпшақ хандығы", "Сақ мемлекеті", "Алтын Орда", "Қарахан мемлекеті"], 
+                correct: 1 
+            },
+            { 
+                question: "Қазақ хандығы қай ғасырда құрылды?", 
+                answers: ["XIII ғасыр", "XV ғасыр", "XVI ғасыр", "XIV ғасыр"], 
+                correct: 1 
+            },
+            { 
+                question: "1916 жылғы ұлт-азаттық көтерілістің себебі?", 
+                answers: ["Ауыл шаруашылығын дамыту", "Жер мәселесі", "Патшаның қазақтарды майдан жұмысына алу туралы жарлығы", "Оқу-ағарту жүйесіндегі өзгерістер"], 
+                correct: 2 
+            },
+            { 
+                question: "Алаш партиясы қай жылы құрылды?", 
+                answers: ["1917 жыл", "1920 жыл", "1936 жыл", "1905 жыл"], 
+                correct: 0 
+            },
+            { 
+                question: "Қазақстандағы 1986 жылғы желтоқсан оқиғасының басты себебі?", 
+                answers: ["Тіл мәселесі", "Жер мәселесі", "Дін мәселесі", "Қазақ басшысын қызметінен алып тастау"], 
+                correct: 3 
+            },
+            { 
+                question: "Қазақтардың Ресей құрамына қосылу процесі қай ғасырда басталды?", 
+                answers: ["XVII ғасыр", "XVI ғасыр", "XVIII ғасыр", "XIX ғасыр"], 
+                correct: 2 
+            },
+            { 
+                question: "ҚР Конституциясы алғаш рет қай жылы қабылданды?", 
+                answers: ["1993 жыл", "1991 жыл", "1995 жыл", "1997 жыл"], 
+                correct: 2 
+            },
+            { 
+                question: "Алтын Орда мемлекетінің негізін қалаған кім?", 
+                answers: ["Жошы", "Шыңғыс хан", "Тайбұға", "Бату хан"], 
+                correct: 3 
+            },
+            { 
+                question: "Қазақ жерінде алғашқы жоғары оқу орны қашан ашылды?", 
+                answers: ["1913 жыл", "1928 жыл", "1934 жыл", "1957 жыл"], 
+                correct: 2 
+            },
+            { 
+                question: "Қазақстанның бірінші президенті кім?", 
+                answers: ["Қасым-Жомарт Тоқаев", "Нұрсұлтан Назарбаев", "Дінмұхамед Қонаев", "Сәкен Сейфуллин"], 
+                correct: 1 
+            },
+            { 
+                question: "Ұлы Отан соғысы қай жылдары болды?", 
+                answers: ["1939-1945", "1941-1945", "1914-1918", "1929-1933"], 
+                correct: 1 
+            },
+            { 
+                question: "Қазақ КСР-і қашан Қазақстан Республикасы болып өзгертілді?", 
+                answers: ["1990 жыл", "1992 жыл", "1991 жыл", "1995 жыл"], 
+                correct: 2 
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        document.querySelector(".start-btn").addEventListener("click", function() {
+            document.querySelector(".test-container").style.display = "block";
+            document.querySelector(".intro").style.display = "none";
+            this.style.display = "none";
+            loadQuestion();
+        });
+
+        function loadQuestion() {
+            let questionObj = questions[currentQuestionIndex];
+            document.getElementById("question-text").innerHTML = "<strong>" + (currentQuestionIndex + 1) + "-сұрақ:</strong> " + questionObj.question;
+            let answersHtml = "";
+            questionObj.answers.forEach((answer, index) => {
+                answersHtml += `<li onclick="checkAnswer(this, ${index === questionObj.correct})">${answer}</li>`;
+            });
+            document.getElementById("answer-options").innerHTML = answersHtml;
+
+            let nextBtn = document.querySelector(".next-btn");
+            nextBtn.style.display = "none";
+        }
+
+        function checkAnswer(element, isCorrect) {
+            if (isCorrect) {
+                element.classList.add("correct");
+                score++;
+            } else {
+                element.classList.add("wrong");
+            }
+            let options = document.querySelectorAll("#answer-options li");
+            options.forEach(option => option.style.pointerEvents = "none");
+
+            let nextBtn = document.querySelector(".next-btn");
+            nextBtn.style.display = "block";
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.textContent = "Завершить тест";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                document.querySelector(".test-container").style.display = "none";
+                document.querySelector(".result").style.display = "block";
+                document.getElementById("score").textContent = score;
+            }
+        }
+    </script>
+
+</body>
+</html>

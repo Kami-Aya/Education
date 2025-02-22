@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Информатика - Тест</title>
+    <link rel="stylesheet" href="informatics.css">
+</head>
+<body>
+
+    <header>
+        <h1>Информатика</h1>
+    </header>
+
+    <div class="intro">
+        <p>Бұл тестте <strong>15 сұрақ</strong> бар.</p>
+        <p>Әр сұраққа <strong>4 жауап нұсқасы</strong> беріледі.</p>
+        <p>Дұрыс жауапты таңдап, нәтижені көріңіз.</p>
+    </div>
+
+    <button class="start-btn">Тестті бастау</button>
+
+    <div class="test-container" style="display: none;">
+        <div class="question-box">
+            <p id="question-text"><strong></strong></p>
+            <ul id="answer-options"></ul>
+        </div>
+
+        <button class="next-btn" onclick="nextQuestion()">Далее</button>
+    </div>
+
+    <div class="result" style="display: none;">
+        <h2>Сіздің нәтижеңіз: <span id="score">0</span> / 15</h2>
+    </div>
+
+    <script>
+        const questions = [
+            { 
+                question: "Компьютердің негізгі бөліктері қандай?", 
+                answers: ["Процессор, монитор, пернетақта", "Тек процессор", "Монитор, принтер", "Барлығы дұрыс"], 
+                correct: 0 
+            },
+            { 
+                question: "Браузер дегеніміз не?", 
+                answers: ["Операциялық жүйе", "Интернетке қосылатын бағдарлама", "Процессордың бөлігі", "Антивирус"], 
+                correct: 1 
+            },
+            { 
+                question: "Операциялық жүйенің негізгі қызметі қандай?", 
+                answers: ["Файлдарды сақтау", "Компьютердің барлық құрылғыларын басқару", "Компьютерді интернетке қосу", "Программаларды орнату"], 
+                correct: 1 
+            },
+            { 
+                question: "HTML не үшін қолданылады?", 
+                answers: ["Веб-беттерді құру үшін", "Компьютерді қорғау үшін", "Ойындар жасау үшін", "Графикалық дизайн үшін"], 
+                correct: 0 
+            },
+            { 
+                question: "Компьютердің ең басты микросхемасы қалай аталады?", 
+                answers: ["Процессор", "Жедел жады", "Қатты диск", "Пернетақта"], 
+                correct: 0 
+            },
+            { 
+                question: "Алгоритмнің негізгі түрлері қандай?", 
+                answers: ["Жолдық, сандық, символдық", "Сызықтық, тармақталған, циклдік", "Базалық, күрделі, қарапайым", "Процедуралық, функционалды"], 
+                correct: 1 
+            },
+            { 
+                question: "RAM (жедел жад) қандай қызмет атқарады?", 
+                answers: ["Файлдарды сақтайды", "Компьютердің жылдамдығын арттырады", "Уақытша деректерді сақтайды", "Графикалық өңдеумен айналысады"], 
+                correct: 2 
+            },
+            { 
+                question: "Компьютердегі ең кіші ақпарат өлшем бірлігі?", 
+                answers: ["Мегабайт", "Байт", "Килобайт", "Бит"], 
+                correct: 3 
+            },
+            { 
+                question: "Компьютердің қатты дискі не үшін қолданылады?", 
+                answers: ["Компьютерді қосу үшін", "Процесстерді орындау үшін", "Тұрақты деректерді сақтау үшін", "Графикалық өңдеу үшін"], 
+                correct: 2 
+            },
+            { 
+                question: "Python қандай программалау тілі?", 
+                answers: ["Компилятор", "Интерпретатор", "Машиналық код", "Ассемблер"], 
+                correct: 1 
+            },
+            { 
+                question: "IP-адрес не үшін қолданылады?", 
+                answers: ["Компьютердің жадысын арттыру", "Компьютерлер арасындағы байланыс үшін", "Компьютердің жылдамдығын арттыру", "Компьютерді вирустан қорғау"], 
+                correct: 1 
+            },
+            { 
+                question: "Деректер базасын басқару жүйесіне не жатады?", 
+                answers: ["Windows", "MS Word", "MySQL", "Photoshop"], 
+                correct: 2 
+            },
+            { 
+                question: "Компьютердің вирустары қандай қауіп төндіреді?", 
+                answers: ["Компьютерді суытып тұрады", "Файлдарды жояды және деректерді ұрлайды", "Компьютердің жылдамдығын арттырады", "Интернет жылдамдығын көбейтеді"], 
+                correct: 1 
+            },
+            { 
+                question: "Интернет желісіндегі мәліметтерді қорғау үшін не қолданылады?", 
+                answers: ["Антивирус", "Фаервол", "Құпиясөздер", "Барлығы дұрыс"], 
+                correct: 3 
+            },
+            { 
+                question: "SSD мен HDD айырмашылығы қандай?", 
+                answers: ["SSD тезірек", "HDD жылдам жұмыс істейді", "SSD диск көп шу шығарады", "HDD тек ноутбуктерге арналған"], 
+                correct: 0 
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        document.querySelector(".start-btn").addEventListener("click", function() {
+            document.querySelector(".test-container").style.display = "block";
+            document.querySelector(".intro").style.display = "none";
+            this.style.display = "none";
+            loadQuestion();
+        });
+
+        function loadQuestion() {
+            let questionObj = questions[currentQuestionIndex];
+            document.getElementById("question-text").innerHTML = "<strong>" + (currentQuestionIndex + 1) + "-сұрақ:</strong> " + questionObj.question;
+            let answersHtml = "";
+            questionObj.answers.forEach((answer, index) => {
+                answersHtml += `<li onclick="checkAnswer(this, ${index === questionObj.correct})">${answer}</li>`;
+            });
+            document.getElementById("answer-options").innerHTML = answersHtml;
+
+            let nextBtn = document.querySelector(".next-btn");
+            nextBtn.style.display = "none";
+        }
+
+        function checkAnswer(element, isCorrect) {
+            if (isCorrect) {
+                element.classList.add("correct");
+                score++;
+            } else {
+                element.classList.add("wrong");
+            }
+            let options = document.querySelectorAll("#answer-options li");
+            options.forEach(option => option.style.pointerEvents = "none");
+
+            let nextBtn = document.querySelector(".next-btn");
+            nextBtn.style.display = "block";
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.textContent = "Завершить тест";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                document.querySelector(".test-container").style.display = "none";
+                document.querySelector(".result").style.display = "block";
+                document.getElementById("score").textContent = score;
+            }
+        }
+    </script>
+
+</body>
+</html>

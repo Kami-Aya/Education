@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Language Test</title>
+    <link rel="stylesheet" href="english.css">
+</head>
+<body>
+
+    <header>
+        <h1>English Language Test</h1>
+    </header>
+
+    <div class="intro">
+        <p>This test consists of <strong>15 questions</strong>.</p>
+        <p>Each question has <strong>4 answer options</strong>.</p>
+        <p>Select the correct answer to see your final score.</p>
+    </div>
+
+    <button class="start-btn">Start Test</button>
+
+    <div class="test-container" style="display: none;">
+        <div class="question-box">
+            <p id="question-text"><strong></strong></p>
+            <ul id="answer-options"></ul>
+        </div>
+
+        <button class="next-btn" onclick="nextQuestion()">Next</button>
+    </div>
+
+    <div class="result" style="display: none;">
+        <h2>Your score: <span id="score">0</span> / 15</h2>
+    </div>
+
+    <script>
+        const questions = [
+            { 
+                question: "What is the plural form of 'child'?", 
+                answers: ["Childs", "Children", "Childes", "Childies"], 
+                correct: 1 
+            },
+            { 
+                question: "Which word is an adjective?", 
+                answers: ["Run", "Happy", "Slowly", "Apple"], 
+                correct: 1 
+            },
+            { 
+                question: "What is the past tense of 'go'?", 
+                answers: ["Goes", "Goed", "Went", "Going"], 
+                correct: 2 
+            },
+            { 
+                question: "Which sentence is grammatically correct?", 
+                answers: ["She go to school.", "She goes to school.", "She going to school.", "She gone to school."], 
+                correct: 1 
+            },
+            { 
+                question: "What is the opposite of 'hot'?", 
+                answers: ["Warm", "Cold", "Dry", "Soft"], 
+                correct: 1 
+            },
+            { 
+                question: "Choose the correct article: '___ apple is red.'", 
+                answers: ["A", "An", "The", "No article needed"], 
+                correct: 1 
+            },
+            { 
+                question: "Which word is a noun?", 
+                answers: ["Run", "Jump", "Car", "Quickly"], 
+                correct: 2 
+            },
+            { 
+                question: "What is the correct form of the verb: 'She ___ a book.'", 
+                answers: ["Reads", "Read", "Reading", "Readed"], 
+                correct: 0 
+            },
+            { 
+                question: "What is the synonym of 'big'?", 
+                answers: ["Tiny", "Huge", "Little", "Small"], 
+                correct: 1 
+            },
+            { 
+                question: "Which sentence is in the future tense?", 
+                answers: ["She will go to school.", "She goes to school.", "She is going to school.", "She went to school."], 
+                correct: 0 
+            },
+            { 
+                question: "Which word is a pronoun?", 
+                answers: ["Table", "She", "Running", "Colorful"], 
+                correct: 1 
+            },
+            { 
+                question: "What is the opposite of 'happy'?", 
+                answers: ["Sad", "Excited", "Angry", "Tired"], 
+                correct: 0 
+            },
+            { 
+                question: "Which word is spelled correctly?", 
+                answers: ["Becouse", "Because", "Becaus", "Becase"], 
+                correct: 1 
+            },
+            { 
+                question: "Choose the correct form: 'I ___ my homework now.'", 
+                answers: ["Do", "Did", "Am doing", "Done"], 
+                correct: 2 
+            },
+            { 
+                question: "What is the comparative form of 'fast'?", 
+                answers: ["Faster", "Fastest", "More fast", "Fastly"], 
+                correct: 0 
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        document.querySelector(".start-btn").addEventListener("click", function() {
+            document.querySelector(".test-container").style.display = "block";
+            document.querySelector(".intro").style.display = "none";
+            this.style.display = "none";
+            loadQuestion();
+        });
+
+        function loadQuestion() {
+            let questionObj = questions[currentQuestionIndex];
+            document.getElementById("question-text").innerHTML = "<strong>Question " + (currentQuestionIndex + 1) + ":</strong> " + questionObj.question;
+            let answersHtml = "";
+            questionObj.answers.forEach((answer, index) => {
+                answersHtml += `<li onclick="checkAnswer(this, ${index === questionObj.correct})">${answer}</li>`;
+            });
+            document.getElementById("answer-options").innerHTML = answersHtml;
+
+            let nextBtn = document.querySelector(".next-btn");
+            nextBtn.style.display = "none";
+        }
+
+        function checkAnswer(element, isCorrect) {
+            if (isCorrect) {
+                element.classList.add("correct");
+                score++;
+            } else {
+                element.classList.add("wrong");
+            }
+            let options = document.querySelectorAll("#answer-options li");
+            options.forEach(option => option.style.pointerEvents = "none");
+
+            let nextBtn = document.querySelector(".next-btn");
+            nextBtn.style.display = "block";
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.textContent = "Finish Test";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                document.querySelector(".test-container").style.display = "none";
+                document.querySelector(".result").style.display = "block";
+                document.getElementById("score").textContent = score;
+            }
+        }
+    </script>
+
+</body>
+</html>

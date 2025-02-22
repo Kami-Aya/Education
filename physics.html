@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Физика - Тест</title>
+    <link rel="stylesheet" href="physics.css">
+</head>
+<body>
+
+    <header>
+        <h1>Физика</h1>
+    </header>
+
+    <div class="intro">
+        <p>Бұл тестте <strong>15 сұрақ</strong> бар.</p>
+        <p>Әр сұраққа <strong>4 жауап нұсқасы</strong> беріледі.</p>
+        <p>Дұрыс жауапты таңдап, нәтижені көріңіз.</p>
+    </div>
+
+    <button class="start-btn">Тестті бастау</button>
+
+    <div class="test-container" style="display: none;">
+        <div class="question-box">
+            <p id="question-text"><strong></strong></p>
+            <ul id="answer-options"></ul>
+        </div>
+
+        <button class="next-btn" onclick="nextQuestion()">Далее</button>
+    </div>
+
+    <div class="result" style="display: none;">
+        <h2>Сіздің нәтижеңіз: <span id="score">0</span> / 15</h2>
+    </div>
+
+    <script>
+        const questions = [
+            { 
+                question: "Ньютонның екінші заңы қалай тұжырымдалады?", 
+                answers: ["F = ma", "F = mv", "F = mg", "F = m/a"], 
+                correct: 0 
+            },
+            { 
+                question: "Кинетикалық энергияның формуласы қандай?", 
+                answers: ["E = mgh", "E = ½ mv²", "E = mc²", "E = Fd"], 
+                correct: 1 
+            },
+            { 
+                question: "Архимед заңы бойынша, сұйыққа батырылған денеге қандай күш әсер етеді?", 
+                answers: ["Гравитациялық күш", "Үйкеліс күші", "Кері итеруші күш", "Тартылыс күші"], 
+                correct: 2 
+            },
+            { 
+                question: "Жарықтың сыну заңы қалай аталады?", 
+                answers: ["Гук заңы", "Ньютон заңы", "Снеллиус заңы", "Фарадей заңы"], 
+                correct: 2 
+            },
+            { 
+                question: "Термодинамиканың бірінші заңы қандай?", 
+                answers: ["Энергия жойылады", "Жүйеге берілген жылу оның ішкі энергиясын арттырады", "Жұмыс тек сыртқы күштер әсерінен жасалады", "Энергия жаңа түрге айналмайды"], 
+                correct: 1 
+            },
+            { 
+                question: "Электр өрісінің кернеулігі қалай анықталады?", 
+                answers: ["E = F/q", "E = q/F", "E = qV", "E = V/R"], 
+                correct: 0 
+            },
+            { 
+                question: "Ом заңының формуласы қандай?", 
+                answers: ["V = IR", "P = IV", "I = R/V", "F = qE"], 
+                correct: 0 
+            },
+            { 
+                question: "Эйнштейннің атақты формуласы қандай?", 
+                answers: ["E = mc²", "F = ma", "P = IV", "Q = mcΔT"], 
+                correct: 0 
+            },
+            { 
+                question: "Жарықтың корпускулалық теориясын кім ұсынды?", 
+                answers: ["Ньютон", "Гук", "Фарадей", "Ом"], 
+                correct: 0 
+            },
+            { 
+                question: "Қандай физикалық шама толқын ұзындығының кері шамасы болып табылады?", 
+                answers: ["Жылдамдық", "Жиілік", "Күш", "Энергия"], 
+                correct: 1 
+            },
+            { 
+                question: "Атомдағы электрондар қай деңгейде орналасады?", 
+                answers: ["Ядрода", "Орбитальдарда", "Магнит өрісінде", "Протон қабатында"], 
+                correct: 1 
+            },
+            { 
+                question: "Радиоактивтік элементтер қандай бөлшектерді шығарады?", 
+                answers: ["Альфа, бета, гамма", "Электрондар мен нейтрондар", "Фотондар мен нейтрондар", "Протондар мен атомдар"], 
+                correct: 0 
+            },
+            { 
+                question: "Фотон дегеніміз не?", 
+                answers: ["Массасы бар бөлшек", "Жарық кванты", "Электронның түрі", "Нейтронның құрамдас бөлігі"], 
+                correct: 1 
+            },
+            { 
+                question: "Электромагниттік толқындардың таралу жылдамдығы қандай?", 
+                answers: ["3 * 10⁸ м/с", "1 * 10⁶ м/с", "5 * 10⁵ м/с", "9.8 м/с²"], 
+                correct: 0 
+            },
+            { 
+                question: "Кулон заңы қандай формуламен өрнектеледі?", 
+                answers: ["F = k(q₁q₂)/r²", "F = ma", "F = mg", "F = IR"], 
+                correct: 0 
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        document.querySelector(".start-btn").addEventListener("click", function() {
+            document.querySelector(".test-container").style.display = "block";
+            document.querySelector(".intro").style.display = "none";
+            this.style.display = "none";
+            loadQuestion();
+        });
+
+        function loadQuestion() {
+            let questionObj = questions[currentQuestionIndex];
+            document.getElementById("question-text").innerHTML = "<strong>" + (currentQuestionIndex + 1) + "-сұрақ:</strong> " + questionObj.question;
+            let answersHtml = "";
+            questionObj.answers.forEach((answer, index) => {
+                answersHtml += `<li onclick="checkAnswer(this, ${index === questionObj.correct})">${answer}</li>`;
+            });
+            document.getElementById("answer-options").innerHTML = answersHtml;
+
+            let nextBtn = document.querySelector(".next-btn");
+            nextBtn.style.display = "none";
+        }
+
+        function checkAnswer(element, isCorrect) {
+            if (isCorrect) {
+                element.classList.add("correct");
+                score++;
+            } else {
+                element.classList.add("wrong");
+            }
+            let options = document.querySelectorAll("#answer-options li");
+            options.forEach(option => option.style.pointerEvents = "none");
+
+            let nextBtn = document.querySelector(".next-btn");
+            nextBtn.style.display = "block";
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.textContent = "Завершить тест";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                document.querySelector(".test-container").style.display = "none";
+                document.querySelector(".result").style.display = "block";
+                document.getElementById("score").textContent = score;
+            }
+        }
+    </script>
+
+</body>
+</html>
