@@ -58,12 +58,12 @@ li {
 }
 
 .correct {
-    background-color: #4CAF50 !important;
+    background-color: #6fcf97; /* Жасыл */
     color: white;
 }
 
 .wrong {
-    background-color: #FF4C4C !important;
+    background-color: #eb5757; /* Қызыл */
     color: white;
 }
 
